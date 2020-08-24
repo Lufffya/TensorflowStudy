@@ -4,27 +4,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-fashion_mnist = tf.keras.datasets.fashion_mnist
+print(tf.__version__)
 
-(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+X = [1,2,3,4,5,6,7,8,9,10]
 
+Y = [10,20,30,40,50,60,70,80,90,100]
 
-dataSet = pd.read_csv("Test.csv")
-
-print(dataSet)
-
-
-X = dataSet.X
-
-print(X)
-
-
-Y = dataSet.Y
-
-print(Y)
-
-#plt.scatter(X,Y)
-#plt.show()
 
 model = tf.keras.Sequential()
 model.add(tf.keras.layers.Dense(1,input_shape=(1,)))
@@ -33,7 +18,30 @@ model.compile(optimizer="adam",loss="mse")
 
 print(model.summary())
 
-model.fit(X,Y,epochs=5000)
+model.fit(X,Y,epochs=500)
+
+print(model.predict([11]))
 
 
-print(model.predict([8]))
+
+# fashion_mnist = tf.keras.datasets.fashion_mnist
+
+# (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+
+
+# dataSet = pd.read_csv("Test.csv")
+
+# print(dataSet)
+
+
+# X = dataSet.X
+
+# print(X)
+
+
+# Y = dataSet.Y
+
+# print(Y)
+
+#plt.scatter(X,Y)
+#plt.show()
