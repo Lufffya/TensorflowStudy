@@ -3,7 +3,7 @@ https://github.com/Lufeifeina/*.git
 
 在命令行上创建新的存储库
 
-echo "# dsad-" >> README.md
+echo "# tensorflowstudy" >> README.md
 git init
 git add README.md
 git commit -m "first commit"
