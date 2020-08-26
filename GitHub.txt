@@ -1,0 +1,17 @@
+GitHub地址：
+https://github.com/Lufeifeina/*.git
+
+在命令行上创建新的存储库
+
+echo "# dsad-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/Lufeifeina/tensorflowstudy.git
+git push -u origin master
+
+
+从命令行推送现有存储库
+
+git remote add origin https://github.com/Lufeifeina/tensorflowstudy.git
+git push -u origin master
