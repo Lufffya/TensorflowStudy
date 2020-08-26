@@ -19,10 +19,9 @@ model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.03),loss="mse")
 
 print(model.summary())
 
-# model.fit(X,Y,batch_size=32,epochs=5000)
+model.fit(X,Y,batch_size=32,epochs=5000)
 
-# print(model.predict([11]))
-
+print(model.predict([11]))
 
 # dataSet = pd.read_csv("Test.csv")
 
