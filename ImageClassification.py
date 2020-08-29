@@ -36,7 +36,7 @@ model.add(tf.keras.layers.Dense(128,activation="relu"))
 model.add(tf.keras.layers.Dense(64,activation="relu"))
 model.add(tf.keras.layers.Dense(32,activation="relu"))
 # 最后使用softmax 多分类的激活函数输入10 个结果
-model.add(tf.keras.layers.Dense(10,activation="softmax"))
+model.add(tf.keras.layers.Dense(1))
 
 print(model.summary())
 
@@ -46,25 +46,25 @@ print(model.summary())
 # 有两个或多个标签类别时，请使用此交叉熵损失函数。
 # 我们希望标签以整数形式提供。如果要使用one-hot表示形式提供标签，请使用CategoricalCrossentropy损失
 # metrics 指标显示 准确率（accuracy）
-model.compile(optimizer="adam",loss="sparse_categorical_crossentropy",metrics=["accuracy"])
+model.compile(optimizer="adam",loss="mse")
 
 # 将训练数据集以及对应的标签添加到模型中训练
 # epochs 训练的次数
-model.fit(train_images,train_labels,epochs=20)
+model.fit(train_images,train_labels,epochs=5)
 
 # predict 模型做出预测
 # 在这里是给定一个图像,让模型预测该图像属于哪个分类
-predict_images = model.predict(test_images)
+predict_images = model.predict(test_images[:1])
 
 # 取出预测可信度的最大值
-print(np.argmax(predict_images[0]))
+print(predict_images)
 
 # 同时输入图像对应的真实标签 与预测的标签对比
 print(test_labels[0])
 
 # 输出预测的这个图像
-plt.figure()
-plt.imshow(test_images[0])
-plt.colorbar()
-plt.grid(False)
-plt.show()
+# plt.figure()
+# plt.imshow(test_images[0])
+# plt.colorbar()
+# plt.grid(False)
+# plt.show()

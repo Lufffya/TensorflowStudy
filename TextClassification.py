@@ -58,7 +58,6 @@ model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
 
 
-
 partial_x_train = train_data[10000:]
 partial_y_train = train_labels[10000:]
 
