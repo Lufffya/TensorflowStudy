@@ -52,10 +52,10 @@ model.add(tf.keras.layers.Embedding(10000, 16))
 model.add(tf.keras.layers.GlobalAveragePooling1D())
 model.add(tf.keras.layers.Dense(16, activation='relu'))
 # 使用 Sigmoid 激活函数，其函数值为介于 0 与 1 之间的浮点数，表示概率或置信度。
-model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+model.add(tf.keras.layers.Dense(2, activation='softmax'))
 
 
-model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
+model.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['accuracy'])
 
 
 partial_x_train = train_data[10000:]
