@@ -18,6 +18,10 @@ Y = [10,20,30,40,50,60,70,80,90,100]
 # 该模型拥有一个输入和一个输出
 model = tf.keras.Sequential()
 model.add(tf.keras.layers.Dense(1))
+x = tf.keras.layers.Input((None,1))
+layer1 = tf.keras.layers.Dense()
+output1 = layer1(x)
+model = tf.keras.Model(inputs=[x],outputs=[output1])
 # model.add(tf.keras.layers.Dense(2,activation='softmax'))
 model.build(input_shape=(None,1))
 # 编译模型
