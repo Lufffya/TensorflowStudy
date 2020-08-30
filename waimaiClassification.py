@@ -13,19 +13,18 @@ train_data = train_data.sample(n=5000)
 
 print(train_data.info())
 
-# 定义一个词库字典
-dictionary = []
-
-newDic = []
+# 定义一个词索引库
+vocab = []
 
 for item in train_data.review:
-    newDic.extend(item)
+    vocab.extend(item)
 
-print(len(newDic))
+print(len(vocab))
 
-aa = train_data.drop_duplicates(['review'])
+vocab = set(vocab)
 
+print(len(vocab))
 
-print(len(aa))
+train_X = []
 
 
