@@ -2,7 +2,6 @@
 #
 # RGB 图像分类
 #
-
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -46,6 +45,28 @@ indices = np.random.permutation(2000 * 6)
 train_image = np.array(train_image)[indices]
 train_lable = np.array(train_lable)[indices]
 
+
+# plt.figure()
+# for i,index in enumerate(indices[:10]):
+#     _title = ""
+#     _lable = np.argmax(train_lable[index])
+#     if _lable == 0:
+#         _title = "建筑"
+#     elif _lable == 1:
+#         _title = "森林"
+#     elif _lable == 2:
+#         _title = "冰川"
+#     elif _lable == 3:
+#         _title = "山"
+#     elif _lable == 4:
+#         _title = "海"
+#     elif _lable == 5:
+#         _title = "街道"
+#     plt.subplot(2,5,i+1)
+#     plt.title(_title)
+    
+#     plt.imshow(train_image[index])
+# plt.show()
 
 
 # 二、构建测试集数据和标签
@@ -95,5 +116,36 @@ model.compile(optimizer=tf.optimizers.Adam(),loss=tf.keras.losses.SparseCategori
 
 
 model.fit(train_image,train_lable,epochs=10)
+
+model.evaluate(test_image,test_lable)
+
+_predict = model.predict(test_image)
+
+#print(np.argmax(_predict[0]))
+
+_indices = np.random.permutation(400 * 6)[:10]
+
+# 输出预测的这个图像
+plt.figure()
+for i,index in enumerate(_indices):
+    _title = ""
+    _lable = np.argmax(_predict[index])
+    if _lable == 0:
+        _title = "建筑"
+    elif _lable == 1:
+        _title = "森林"
+    elif _lable == 2:
+        _title = "冰川"
+    elif _lable == 3:
+        _title = "山"
+    elif _lable == 4:
+        _title = "海"
+    elif _lable == 5:
+        _title = "街道"
+    plt.subplot(2,5,i+1)
+    plt.title(_title)
+    plt.rcParams['font.sans-serif']=['SimHei'] # 用来正常显示中文标签
+    plt.imshow(test_image[index])
+plt.show()
 
 print()
