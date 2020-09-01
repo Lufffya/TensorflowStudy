@@ -33,9 +33,8 @@ for item in os.listdir(trainFilelDirectory):
     for fileName in os.listdir(trainFilelDirectory + item):
         if imageMaxCount == 0 : break
         img = cv2.imread(trainFilelDirectory + item + "\\" + fileName)
-
-        img = img / 255.
-
+        if img.shape != (150,150,3) : continue
+        # img = img / 255.
         train_image.append(img)
         train_lable.append(thisLable)
         imageMaxCount = imageMaxCount - 1
@@ -44,8 +43,9 @@ for item in os.listdir(trainFilelDirectory):
 # 同时打乱训练数据和标签的顺序
 # shape[0]表示第0轴的长度，通常是训练数据的数量
 indices = np.random.permutation(2000 * 6)
-train_image = np.array(train_image,dtype=float)[indices]
+train_image = np.array(train_image)[indices]
 train_lable = np.array(train_lable)[indices]
+
 
 
 # 二、构建测试集数据和标签
@@ -62,6 +62,8 @@ for item in os.listdir(trainFilelDirectory):
     for fileName in os.listdir(trainFilelDirectory + item):
         if imageMaxCount == 0 : break
         img = cv2.imread(trainFilelDirectory + item + "\\" + fileName)
+        if img.shape != (150,150,3) : continue
+        # img = img / 255.
         test_image.append(img)
         test_lable.append(thisLable)
         imageMaxCount = imageMaxCount - 1
@@ -93,3 +95,5 @@ model.compile(optimizer=tf.optimizers.Adam(),loss=tf.keras.losses.SparseCategori
 
 
 model.fit(train_image,train_lable,epochs=10)
+
+print()
