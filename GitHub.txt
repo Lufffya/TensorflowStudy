@@ -15,3 +15,7 @@ git push -u origin master
 
 git remote add origin https://github.com/Lufeifeina/tensorflowstudy.git
 git push -u origin master
+
+在命令上从现在存储库地址克隆
+
+git clone https://github.com/Lufeifeina/tensorflowstudy.git
