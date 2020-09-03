@@ -19,14 +19,13 @@ import pathlib
 import tensorflow as tf
 
 
-dataset_url = "https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz"
-data_dir = tf.keras.utils.get_file('flower_photos', origin=dataset_url, untar=True)
+data_dir = tf.keras.utils.get_file('flower_photos', origin="https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz", untar=True)
 data_dir = pathlib.Path(data_dir)
 
-
+# 读取训练数据集
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(data_dir,validation_split=0.2,subset="training",seed=123,image_size=(180, 180),batch_size=32)
 
-
+# 读取测试数据集
 val_ds = tf.keras.preprocessing.image_dataset_from_directory(data_dir,validation_split=0.2,subset="validation",seed=123,image_size=(180, 180),batch_size=32)
 
 
@@ -44,13 +43,16 @@ val_ds = tf.keras.preprocessing.image_dataset_from_directory(data_dir,validation
 #   tf.keras.layers.Dense(5)
 # ])
 
+#使用函数式编程方式创建模型
 
+# 定义输入函数
 _input = tf.keras.Input(shape=(180, 180, 3))
 
 layer1 = tf.keras.layers.experimental.preprocessing.Rescaling(1./255)
 
 layer2 = layer1(_input)
 
+# 第一层卷积
 layer3 = tf.keras.layers.Conv2D(16,3,padding="same")
 
 layer4 = layer3(layer2)
@@ -61,21 +63,47 @@ layer6 = tf.keras.layers.MaxPool2D()
 
 layer7 = layer6(layer5)
 
-layer8 = tf.keras.layers.Flatten()
+# 第二层卷积
+layer8 = tf.keras.layers.Conv2D(32,3,padding="same")
 
 layer9 = layer8(layer7)
 
-layer10 = tf.keras.layers.Dense(128)
+layer10 = tf.keras.activations.relu(layer9)
 
-layer11 = layer10(layer9)
+layer11 = tf.keras.layers.MaxPool2D()
 
-layer12 = tf.keras.activations.relu(layer11)
+layer12 = layer11(layer10)
 
-layer13 = tf.keras.layers.Dense(5)
+# 第三层卷积
+layer13 = tf.keras.layers.Conv2D(64,3,padding="same")
 
-_output = layer13(layer12)
+layer14 = layer13(layer12)
+
+layer15 = tf.keras.activations.relu(layer14)
+
+layer16 = tf.keras.layers.MaxPool2D()
+
+layer17 = layer16(layer15)
+
+# 将多维数据打平变成一个向量
+layer18 = tf.keras.layers.Flatten()
+
+layer19 = layer18(layer17)
+
+layer20 = tf.keras.layers.Dense(128)
+
+layer21 = layer20(layer19)
+
+layer22 = tf.keras.activations.relu(layer21)
+
+layer23 = tf.keras.layers.Dense(5)
+
+# 定义输出函数
+_output = layer23(layer22)
+
 
 model = tf.keras.Model(inputs=_input,outputs=_output)
+
 
 model.compile(optimizer='adam',loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),metrics=['accuracy'])
 
