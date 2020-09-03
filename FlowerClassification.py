@@ -28,20 +28,20 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(data_dir,validati
 # 读取测试数据集
 val_ds = tf.keras.preprocessing.image_dataset_from_directory(data_dir,validation_split=0.2,subset="validation",seed=123,image_size=(180, 180),batch_size=32)
 
+class_names = train_ds.class_names
+print(class_names)
 
-# model = tf.keras.Sequential([
-#   tf.keras.layers.experimental.preprocessing.Rescaling(1./255, input_shape=(180, 180, 3)),
+import matplotlib.pyplot as plt
 
-#   tf.keras.layers.Conv2D(16, 3, padding='same', activation='relu'),
-#   tf.keras.layers.MaxPooling2D(),
-#   tf.keras.layers.Conv2D(32, 3, padding='same', activation='relu'),
-#   tf.keras.layers.MaxPooling2D(),
-#   tf.keras.layers.Conv2D(64, 3, padding='same', activation='relu'),
-#   tf.keras.layers.MaxPooling2D(),
-#   tf.keras.layers.Flatten(),
-#   tf.keras.layers.Dense(128, activation='relu'),
-#   tf.keras.layers.Dense(5)
-# ])
+plt.figure(figsize=(10, 10))
+for images, labels in train_ds.take(1):
+  for i in range(9):
+    ax = plt.subplot(3, 3, i + 1)
+    plt.imshow(images[i].numpy().astype("uint8"))
+    plt.title(class_names[labels[i]])
+    plt.axis("off")
+
+plt.show()
 
 #使用函数式编程方式创建模型
 
@@ -63,6 +63,9 @@ layer6 = tf.keras.layers.MaxPool2D()
 
 layer7 = layer6(layer5)
 
+# 防止过度拟合
+# layer7 = tf.keras.layers.Dropout(0.4)(layer7)
+
 # 第二层卷积
 layer8 = tf.keras.layers.Conv2D(32,3,padding="same")
 
@@ -74,6 +77,9 @@ layer11 = tf.keras.layers.MaxPool2D()
 
 layer12 = layer11(layer10)
 
+# 防止过度拟合
+# layer12 = tf.keras.layers.Dropout(0.4)(layer12)
+
 # 第三层卷积
 layer13 = tf.keras.layers.Conv2D(64,3,padding="same")
 
@@ -84,6 +90,9 @@ layer15 = tf.keras.activations.relu(layer14)
 layer16 = tf.keras.layers.MaxPool2D()
 
 layer17 = layer16(layer15)
+
+# 防止过度拟合
+# layer17 = tf.keras.layers.Dropout(0.4)(layer17)
 
 # 将多维数据打平变成一个向量
 layer18 = tf.keras.layers.Flatten()
@@ -98,17 +107,22 @@ layer22 = tf.keras.activations.relu(layer21)
 
 layer23 = tf.keras.layers.Dense(5)
 
+layer24 = layer23(layer22)
+
 # 定义输出函数
-_output = layer23(layer22)
+_output = tf.keras.activations.softmax(layer24)
 
 
 model = tf.keras.Model(inputs=_input,outputs=_output)
 
 
-model.compile(optimizer='adam',loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),metrics=['accuracy'])
+model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001),loss=tf.keras.losses.SparseCategoricalCrossentropy(),metrics=['accuracy'])
 
 
 print(model.summary())
 
 
 history = model.fit(train_ds,validation_data=val_ds,epochs=10)
+
+
+model.evaluate(val_ds)
