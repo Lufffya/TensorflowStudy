@@ -31,7 +31,7 @@ for item in os.listdir(trainFilelDirectory):
     imageMaxCount = 2000
     for fileName in os.listdir(trainFilelDirectory + item):
         if imageMaxCount == 0 : break
-        img = cv2.imread(trainFilelDirectory + item + "\\" + fileName)
+        img = cv2.imread(trainFilelDirectory + item + "\\" + fileName)[:,:,::-1]
         if img.shape != (150,150,3) : continue
         # img = img / 255.
         train_image.append(img)
@@ -44,30 +44,6 @@ for item in os.listdir(trainFilelDirectory):
 indices = np.random.permutation(2000 * 6)
 train_image = np.array(train_image)[indices]
 train_lable = np.array(train_lable)[indices]
-
-
-# plt.figure()
-# for i,index in enumerate(indices[:10]):
-#     _title = ""
-#     _lable = np.argmax(train_lable[index])
-#     if _lable == 0:
-#         _title = "建筑"
-#     elif _lable == 1:
-#         _title = "森林"
-#     elif _lable == 2:
-#         _title = "冰川"
-#     elif _lable == 3:
-#         _title = "山"
-#     elif _lable == 4:
-#         _title = "海"
-#     elif _lable == 5:
-#         _title = "街道"
-#     plt.subplot(2,5,i+1)
-#     plt.title(_title)
-    
-#     plt.imshow(train_image[index])
-# plt.show()
-
 
 # 二、构建测试集数据和标签
 testFilelDirectory = "E:\\PicturesClassification\\seg_test\\"
@@ -82,7 +58,7 @@ for item in os.listdir(trainFilelDirectory):
     imageMaxCount = 400
     for fileName in os.listdir(trainFilelDirectory + item):
         if imageMaxCount == 0 : break
-        img = cv2.imread(trainFilelDirectory + item + "\\" + fileName)
+        img = cv2.imread(trainFilelDirectory + item + "\\" + fileName)[:,:,::-1]
         if img.shape != (150,150,3) : continue
         # img = img / 255.
         test_image.append(img)

@@ -16,14 +16,26 @@ Y = [10,20,30,40,50,60,70,80,90,100]
 
 # 创建模型
 # 该模型拥有一个输入和一个输出
-model = tf.keras.Sequential()
-model.add(tf.keras.layers.Dense(1))
-x = tf.keras.layers.Input((None,1))
-layer1 = tf.keras.layers.Dense()
-output1 = layer1(x)
-model = tf.keras.Model(inputs=[x],outputs=[output1])
-# model.add(tf.keras.layers.Dense(2,activation='softmax'))
-model.build(input_shape=(None,1))
+#model = tf.keras.Sequential()
+#model.add(tf.keras.layers.Dense(1,input_shape=(None,1)))
+
+
+
+# x = tf.keras.layers.Input((None,1))
+# layer1 = tf.keras.layers.Dense()
+# output1 = layer1(x)
+# model = tf.keras.Model(inputs=[x],outputs=[output1])
+# model.add(tf.keras.layers.Dense(1,activation='softmax'))
+
+# 告诉模型的输入数据形状
+# model.build(input_shape=(None,1))
+
+_input = tf.keras.layers.Input(shape=(None,1))
+_layer1 = tf.keras.layers.Dense(1)
+_output = _layer1(_input)
+
+model = tf.keras.Model(inputs=_input,outputs=_output)
+
 # 编译模型
 # optimizer 优化器  Adam = 使用梯度下降优化算法  lr = 学习速率
 # loss 损失函数 mse = 使用均方差
