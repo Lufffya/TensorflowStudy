@@ -2,6 +2,7 @@
 #
 # Google Bert 模型
 #
+<<<<<<< HEAD
 import tensorflow as tf
 import numpy as np
 import bert # pip install bert-for-tf2
@@ -71,3 +72,7 @@ model.fit(train_X,train_Y,epochs=2)
 # model.build(input_shape=(None,128))
 
 # print(model.summary())
+=======
+
+
+>>>>>>> 492ef786ce659c0a1421724fb892618d256a5b11
