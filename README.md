@@ -1,1 +1,1 @@
-# tensorflowstudy
+# take note on tensorflow 
