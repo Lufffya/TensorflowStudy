@@ -76,10 +76,10 @@ test_lable = np.array(test_lable)[indices]
 model = tf.keras.Sequential()
 
 model.add(tf.keras.layers.Conv2D(32,(3,3),activation="relu",input_shape=(150,150,3)))
-model.add(tf.keras.layers.MaxPooling2D(2,2))
+model.add(tf.keras.layers.MaxPooling2D())
 
 model.add(tf.keras.layers.Conv2D(32,(3,3),activation="relu"))
-model.add(tf.keras.layers.MaxPooling2D((2,2)))
+model.add(tf.keras.layers.MaxPooling2D())
 
 model.add(tf.keras.layers.Conv2D(64,(3,3),activation="relu"))
 
@@ -87,6 +87,7 @@ model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(64, activation="relu"))
 model.add(tf.keras.layers.Dense(6,activation="softmax"))
 
+print(model.summary())
 
 model.compile(optimizer=tf.optimizers.Adam(),loss=tf.keras.losses.SparseCategoricalCrossentropy(),metrics=["acc"])
 

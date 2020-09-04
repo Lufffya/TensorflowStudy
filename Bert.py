@@ -2,7 +2,6 @@
 #
 # Google Bert 模型
 #
-<<<<<<< HEAD
 import tensorflow as tf
 import numpy as np
 import bert # pip install bert-for-tf2
@@ -25,7 +24,7 @@ tokenizer = bert.bert_tokenization.FullTokenizer(vocab_file="Models\Bert_Chinese
 train_data = pd.read_csv("DataSet\外卖评价.csv")
 
 # 从数据集中随机取出指定条数
-train_data = train_data.sample(n=10000)
+train_data = train_data.sample(n=11000)
 
 train_Y = train_data.label.values
 
@@ -36,7 +35,8 @@ _reviewsLenth = []
 for reviews in train_data.review.values:
     _reviewsLenth.append(len(reviews))
 
-maxReviewCount = max(_reviewsLenth)
+# maxReviewCount = max(_reviewsLenth)
+maxReviewCount = 256
 
 # 对中文进行编码
 for reviews in train_data.review.values:
@@ -44,6 +44,7 @@ for reviews in train_data.review.values:
     token_ids = tokenizer.convert_tokens_to_ids(tokens)
     if len(token_ids) < maxReviewCount:
         token_ids = token_ids + [tokenizer.vocab["[unused1]"]] * (maxReviewCount - len(token_ids))
+    token_ids = token_ids[:maxReviewCount]
     train_X.append(np.array(token_ids))
 
 train_X = np.array(train_X)
@@ -51,28 +52,17 @@ train_X = np.array(train_X)
 
 model = tf.keras.Sequential()
 model.add(bert_layer)
-model.add(tf.keras.layers.Flatten())
+model.add(tf.keras.layers.GlobalAveragePooling1D())
+model.add(tf.keras.layers.Dense(1024,activation="relu"))
+model.add(tf.keras.layers.Dense(512,activation="relu"))
 model.add(tf.keras.layers.Dense(64,activation="relu"))
 model.add(tf.keras.layers.Dense(2,activation="softmax"))
-
 
 model.build(input_shape=(None,maxReviewCount))
 
 print(model.summary())
 
-model.compile(optimizer=tf.optimizers.Adam(),loss=tf.losses.SparseCategoricalCrossentropy(),metrics=["acc"])
+model.compile(optimizer=tf.optimizers.Adam(lr=0.00001),loss=tf.losses.SparseCategoricalCrossentropy(),metrics=["acc"])
+
 
 model.fit(train_X,train_Y,epochs=2)
-
-
-
-
-# model = tf.keras.Sequential()
-# model.add(bert_layer)
-# model.build(input_shape=(None,128))
-
-# print(model.summary())
-=======
-
-
->>>>>>> 492ef786ce659c0a1421724fb892618d256a5b11

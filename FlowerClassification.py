@@ -51,7 +51,7 @@ layer1 = tf.keras.layers.experimental.preprocessing.Rescaling(1./255)
 layer2 = layer1(_input)
 
 # 第一层卷积
-layer3 = tf.keras.layers.Conv2D(16,3,padding="same")
+layer3 = tf.keras.layers.Conv2D(16,3)
 
 layer4 = layer3(layer2)
 
@@ -62,10 +62,10 @@ layer6 = tf.keras.layers.MaxPool2D()
 layer7 = layer6(layer5)
 
 # 防止过度拟合
-# layer7 = tf.keras.layers.Dropout(0.4)(layer7)
+layer7 = tf.keras.layers.Dropout(0.4)(layer7)
 
 # 第二层卷积
-layer8 = tf.keras.layers.Conv2D(32,3,padding="same")
+layer8 = tf.keras.layers.Conv2D(32,3)
 
 layer9 = layer8(layer7)
 
@@ -76,10 +76,10 @@ layer11 = tf.keras.layers.MaxPool2D()
 layer12 = layer11(layer10)
 
 # 防止过度拟合
-# layer12 = tf.keras.layers.Dropout(0.4)(layer12)
+layer12 = tf.keras.layers.Dropout(0.4)(layer12)
 
 # 第三层卷积
-layer13 = tf.keras.layers.Conv2D(64,3,padding="same")
+layer13 = tf.keras.layers.Conv2D(64,3)
 
 layer14 = layer13(layer12)
 
@@ -90,7 +90,7 @@ layer16 = tf.keras.layers.MaxPool2D()
 layer17 = layer16(layer15)
 
 # 防止过度拟合
-# layer17 = tf.keras.layers.Dropout(0.4)(layer17)
+layer17 = tf.keras.layers.Dropout(0.4)(layer17)
 
 # 将多维数据打平变成一个向量
 layer18 = tf.keras.layers.Flatten()
