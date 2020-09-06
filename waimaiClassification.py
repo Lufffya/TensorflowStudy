@@ -5,6 +5,7 @@
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+import scipy.spatial
 
 # 读取数据集
 train_data = pd.read_csv("DataSet\外卖评价.csv")
@@ -71,6 +72,8 @@ train_Y = _Y_Data[:4000]
 
 test_Y = _Y_Data[4000:]
 
+print(len(vocab)+1)
+
 # 创建模型
 model = tf.keras.Sequential()
 model.add(tf.keras.layers.Embedding(input_dim=len(vocab)+1,output_dim=128,input_length=maxIndexLength))
@@ -97,6 +100,8 @@ _predict = model.predict(test_X)
 
 # print(_output)
 
+print("*********************句子分类**********************")
+
 _indices = np.random.permutation(1000)[:10]
 
 for index in _indices:
@@ -106,3 +111,16 @@ for index in _indices:
         if item == 0 : continue
         _output += vocab[(item - 1)]
     print("预测的标签为：{0},真实的标签为：{1},句子：{2}".format(_argmax,test_Y.values[index],_output))
+
+
+
+print("*********************语义提取**********************")
+
+
+embedding_layer = model.layers[0]
+
+print(embedding_layer(test_X[0]))
+
+scores = scipy.spatial.distance.cdist(embedding_layer(test_X[0]), embedding_layer(train_X))
+
+print()
