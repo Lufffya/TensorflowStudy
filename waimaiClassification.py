@@ -6,6 +6,7 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 import scipy.spatial
+from tqdm import tqdm
 
 # 读取数据集
 train_data = pd.read_csv("DataSet\外卖评价.csv")
@@ -116,11 +117,32 @@ for index in _indices:
 
 print("*********************语义提取**********************")
 
+def get_bert_encode(inputs):
+    embedding_layer = model.layers[0]
+    pooling = tf.keras.layers.Flatten()
+    encodes = []
 
+    for i in tqdm(range(0,len(inputs),32)):
+        batch = inputs[i:i+32]
+        pooled = pooling(embedding_layer(batch))        
+        encodes.extend(pooled.numpy())
+        # pass
+    return np.array(encodes)
+
+
+# 获取模型中的embedding层
 embedding_layer = model.layers[0]
 
-print(embedding_layer(test_X[0]))
 
-scores = scipy.spatial.distance.cdist(embedding_layer(test_X[0]), embedding_layer(train_X))
+print(get_bert_encode(test_X[0]))
 
-print()
+# 根据词数据获取词向量
+x_word_embedding = np.array(embedding_layer(test_X[0]))
+
+train_X_word_embedding = np.array(embedding_layer(train_X))
+
+scores = scipy.spatial.distance.cdist(x_word_embedding, train_X_word_embedding)[0]
+results = zip(range(len(scores)), scores)
+results = sorted(results, key=lambda x: x[1], reverse=False) 
+for idx, score in results[0:20]:
+        print(train_data.review.values[idx], "(Score: %.4f)" % (score))

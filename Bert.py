@@ -35,8 +35,8 @@ _reviewsLenth = []
 for reviews in train_data.review.values:
     _reviewsLenth.append(len(reviews))
 
-# maxReviewCount = max(_reviewsLenth)
-maxReviewCount = 256
+maxReviewCount = max(_reviewsLenth)
+# maxReviewCount = 256
 
 # 对中文进行编码
 for reviews in train_data.review.values:
@@ -48,7 +48,6 @@ for reviews in train_data.review.values:
     train_X.append(np.array(token_ids))
 
 train_X = np.array(train_X)
-
 
 model = tf.keras.Sequential()
 model.add(bert_layer)
@@ -64,5 +63,4 @@ print(model.summary())
 
 model.compile(optimizer=tf.optimizers.Adam(lr=0.00001),loss=tf.losses.SparseCategoricalCrossentropy(),metrics=["acc"])
 
-
-model.fit(train_X,train_Y,epochs=2)
+model.fit(train_X,train_Y,epochs=2,batch_size=10)
