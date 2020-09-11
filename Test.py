@@ -1,13 +1,9 @@
 
 import scipy.spatial
-
-
+import tensorflow as tf
 
 
 print(scipy.spatial.distance.cdist([[1]], [[2]]))
-
-
-
 
 
 array = []

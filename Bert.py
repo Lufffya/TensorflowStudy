@@ -14,7 +14,7 @@ from tqdm import tqdm
 # https://github.com/google-research/bert
 
 # 获取bert模型预训练的参数
-bert_params = bert.params_from_pretrained_ckpt("Models\Bert_Chinese")
+bert_params = bert.params_from_pretrained_ckpt("Models\Bert_Pretraining")
 
 # 从参数构建bert模型层
 bert_layer = bert.BertModelLayer.from_params(bert_params, name="bert")
