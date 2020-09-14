@@ -14,13 +14,13 @@ from tqdm import tqdm
 # https://github.com/google-research/bert
 
 # 获取bert模型预训练的参数
-bert_params = bert.params_from_pretrained_ckpt("Models\Bert_Pretraining")
+bert_params = bert.params_from_pretrained_ckpt("Models\Bert_CN_Google-Research")
 
 # 从参数构建bert模型层
 bert_layer = bert.BertModelLayer.from_params(bert_params, name="bert")
 
 # 从bert词库构建标记器
-tokenizer = bert.bert_tokenization.FullTokenizer(vocab_file="Models\Bert_Chinese\\vocab.txt")
+tokenizer = bert.bert_tokenization.FullTokenizer(vocab_file="Models\Bert_CN_Google-Research\\vocab.txt")
 
 # 读取数据集
 train_data = pd.read_csv("DataSet\外卖评价.csv")
