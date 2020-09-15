@@ -9,7 +9,7 @@ import scipy.spatial
 from tqdm import tqdm
 
 # 读取数据集
-train_data = pd.read_csv("DataSet\外卖评价.csv")
+train_data = pd.read_csv("DataSet\\外卖评价.csv")
 
 take_OutData = 10000
 train_Size = 8000
