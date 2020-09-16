@@ -1,6 +1,8 @@
 #
+# Bert 中文词意搜索
 # Google Bert 模型
 #
+
 import tensorflow as tf
 import numpy as np
 import bert # pip install bert-for-tf2

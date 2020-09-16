@@ -1,3 +1,8 @@
+#
+# 花朵照片分类
+# https://tensorflow.google.cn/tutorials/images/classification
+#
+
 #本教程遵循基本的机器学习工作流程：
 
 # 1,检查并了解数据
@@ -6,11 +11,6 @@
 # 4,训练模型
 # 5,测试模型
 # 6,改进模型并重复该过程
-
-#
-# 花朵照片分类
-# https://tensorflow.google.cn/tutorials/images/classification
-#
 
 import pathlib
 import tensorflow as tf

@@ -20,4 +20,3 @@ for epoch in range(epoch):
     a.assign_sub(lr * grads)
 
     print("After %s epoch,a is %f,loss is %f" % (epoch,a.numpy(),loss))
-    
