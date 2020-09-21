@@ -17,7 +17,7 @@ print("工作表：" + str(review_Data.sheet_names()))
 
 # 遍历所有Sheet
 for sheet in review_Data.sheets():
-    print('''''''''''''''''''''''''''''')
+    print("============================")
     print("Sheet名称：" + str(sheet.name))
     print("总行数：" + str(sheet.nrows))
     print("总列数：" + str(sheet.ncols))
