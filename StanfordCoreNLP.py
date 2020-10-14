@@ -49,7 +49,6 @@ for i, sentence in enumerate(doc.sentences):
 #     print("Sheet名称：" + str(sheet.name))
 #     print("总行数：" + str(sheet.nrows))
 #     print("总列数：" + str(sheet.ncols))
-
 #     sheetReviews = sheet.col_values(0)
     
 #     for review in sheetReviews:
