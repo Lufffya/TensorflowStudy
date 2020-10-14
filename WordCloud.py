@@ -27,11 +27,13 @@ for sheet in review_Data.sheets():
     # 生成词云图像
     # max_words：最大字数
     wordcloud = WordCloud(max_words=10).generate(textReviews)
-    plt.figure()
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis("off")
-    plt.show()
-
+    #plt.figure()
+    #plt.imshow(wordcloud, interpolation='bilinear')
+    #plt.axis("off")
+    # plt.show()
+    #plt.savefig("0000.jpg")
+    image = wordcloud.to_image()
+    image.save("000.jpg")
 
 # 通过文件名获得工作表,获取工作表
 # sheet = review_Data.sheet_by_name('聚类0')

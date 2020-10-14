@@ -12,8 +12,28 @@ import stanza
 
 
 # 加载官方英文模型
-nlp = stanza.Pipeline(dir="Models\\Stanford_CoreNLP\\Stanford_EN_Model")
+nlp = stanza.Pipeline(dir="Models\\Stanford_CoreNLP\\Stanford_EN_Model",processors="tokenize,sentiment")
 
+#==========情感分析===========#
+doc = nlp('I love the feel of the mouse it is self but it broke within 4 months of having it')
+
+for i, sentence in enumerate(doc.sentences):
+    print(i, sentence.sentiment)
+
+doc = nlp('did not like it')
+
+for i, sentence in enumerate(doc.sentences):
+    print(i, sentence.sentiment)
+
+doc = nlp('I do not like it very much')
+
+for i, sentence in enumerate(doc.sentences):
+    print(i, sentence.sentiment)
+
+doc = nlp('I changed the battery and it still does not work')
+
+for i, sentence in enumerate(doc.sentences):
+    print(i, sentence.sentiment)
 
 # import xlrd
 
@@ -37,11 +57,6 @@ nlp = stanza.Pipeline(dir="Models\\Stanford_CoreNLP\\Stanford_EN_Model")
 #         print(f'======{review}=======')
 #         for ent in doc.ents:
 #             print(f'entity: {ent.text}\ttype: {ent.type}', sep='\n')
-
-
-   
-
-
 
 print()
 
@@ -80,10 +95,3 @@ for ent in doc.ents:
 for sent in doc.sentences:
     for token in sent.tokens:
         print(f'token: {token.text}\tner: {token.ner}', sep='\n')
-
-
-#==========情感分析===========#
-doc = nlp('I like it very much')
-
-for i, sentence in enumerate(doc.sentences):
-    print(i, sentence.sentiment)

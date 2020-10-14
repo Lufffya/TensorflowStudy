@@ -1,7 +1,8 @@
+x = [1,2,3]
 
+avg = sum(x) / len(x)
 
-
-
+import scipy.spatial
 import numpy as np
 from sklearn.cluster import KMeans
 from matplotlib import pyplot
@@ -16,6 +17,10 @@ clf = KMeans(n_clusters=2)
 clf.fit(x)  # 分组
  
 centers = clf.cluster_centers_ # 两组数据点的中心点
+
+# 计算标签句子词向量和训练句子词向量之间的欧式距离
+# euclidean_Distance = scipy.spatial.distance.cdist(centers[0], train_X_Encoding)[0]
+
 labels = clf.labels_   # 每个数据点所属分组
 print(centers)
 print(labels)
