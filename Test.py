@@ -24,3 +24,4 @@ for review in review_Data:
     print(f'======{review}=======')
     for ent in doc.ents:
         print(f'entity: {ent.text}\ttype: {ent.type}', sep='\n')
+        
