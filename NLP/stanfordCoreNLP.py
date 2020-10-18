@@ -6,16 +6,18 @@
 import stanza
 
 # 该stanza包需要GPU支持
-#pip install https://download.pytorch.org/whl/cu101/torch-1.4.0-cp38-cp38-win_amd64.whl
+# pip install https://download.pytorch.org/whl/cu101/torch-1.4.0-cp38-cp38-win_amd64.whl
 
-#pip install https://download.pytorch.org/whl/cu101/torchvision-0.5.0-cp38-cp38-win_amd64.whl
+# pip install https://download.pytorch.org/whl/cu101/torchvision-0.5.0-cp38-cp38-win_amd64.whl
 
 
 # 加载官方英文模型
-nlp = stanza.Pipeline(dir="Models\\Stanford_CoreNLP\\Stanford_EN_Model",processors="tokenize,sentiment")
+nlp = stanza.Pipeline(
+    dir="Models\\Stanford_CoreNLP\\Stanford_EN_Model", processors="tokenize,sentiment")
 
 #==========情感分析===========#
-doc = nlp('I love the feel of the mouse it is self but it broke within 4 months of having it')
+doc = nlp(
+    'I love the feel of the mouse it is self but it broke within 4 months of having it')
 
 for i, sentence in enumerate(doc.sentences):
     print(i, sentence.sentiment)
@@ -50,7 +52,7 @@ for i, sentence in enumerate(doc.sentences):
 #     print("总行数：" + str(sheet.nrows))
 #     print("总列数：" + str(sheet.ncols))
 #     sheetReviews = sheet.col_values(0)
-    
+
 #     for review in sheetReviews:
 #         doc = nlp(review)
 #         print(f'======{review}=======')
@@ -73,7 +75,8 @@ doc = nlp('I Love you')
 
 for sent in doc.sentences:
     for word in sent.words:
-        print(f'id: {word.id}\tword: {word.text}\thead id: {word.head}\thead: {sent.words[word.head-1].text if word.head > 0 else "root"}\tdeprel: {word.deprel}', sep='\n')
+        print(
+            f'id: {word.id}\tword: {word.text}\thead id: {word.head}\thead: {sent.words[word.head-1].text if word.head > 0 else "root"}\tdeprel: {word.deprel}', sep='\n')
 
 
 #==========实体标记提取===========#

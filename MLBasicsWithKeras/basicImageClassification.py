@@ -14,7 +14,8 @@ import matplotlib.pyplot as plt
 fashion_mnist = tf.keras.datasets.fashion_mnist
 
 # 引入图像数据集
-(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+(train_images, train_labels), (test_images,
+                               test_labels) = fashion_mnist.load_data()
 
 # 观察训练数据集图片形状以及对应标签分类
 print(train_images.shape)
@@ -27,14 +28,14 @@ test_images = test_images / 255.0
 # 建立一个神经网络序列模型
 model = tf.keras.Sequential()
 # 把多维的数据压至一维并告诉模型输入的数据集的形状，这里把输入是一个28*28像素二维数组压成 28 * 28 = 784 一维数组并使它排列成一排
-model.add(tf.keras.layers.Flatten(input_shape=(28, 28))) # 默认隐含层输出参数是 784
+model.add(tf.keras.layers.Flatten(input_shape=(28, 28)))  # 默认隐含层输出参数是 784
 # 添加线性网络层，并定义每一层的输出
 # 激活函数 relu 将保留线性有效部分
-model.add(tf.keras.layers.Dense(512,activation="relu"))
-model.add(tf.keras.layers.Dense(256,activation="relu"))
-model.add(tf.keras.layers.Dense(128,activation="relu"))
-model.add(tf.keras.layers.Dense(64,activation="relu"))
-model.add(tf.keras.layers.Dense(32,activation="relu"))
+model.add(tf.keras.layers.Dense(512, activation="relu"))
+model.add(tf.keras.layers.Dense(256, activation="relu"))
+model.add(tf.keras.layers.Dense(128, activation="relu"))
+model.add(tf.keras.layers.Dense(64, activation="relu"))
+model.add(tf.keras.layers.Dense(32, activation="relu"))
 # 最后使用softmax 多分类的激活函数输入10 个结果
 model.add(tf.keras.layers.Dense(1))
 
@@ -46,11 +47,11 @@ print(model.summary())
 # 有两个或多个标签类别时，请使用此交叉熵损失函数。
 # 我们希望标签以整数形式提供。如果要使用one-hot表示形式提供标签，请使用CategoricalCrossentropy损失
 # metrics 指标显示 准确率（accuracy）
-model.compile(optimizer="adam",loss="mse")
+model.compile(optimizer="adam", loss="mse")
 
 # 将训练数据集以及对应的标签添加到模型中训练
 # epochs 训练的次数
-model.fit(train_images,train_labels,epochs=5)
+model.fit(train_images, train_labels, epochs=5)
 
 # predict 模型做出预测
 # 在这里是给定一个图像,让模型预测该图像属于哪个分类
