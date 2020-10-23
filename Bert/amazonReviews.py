@@ -43,9 +43,8 @@ train_X = np.array(train_X)
 
 print(len(train_X))
 
+
 # 根据句索引获取句向量
-
-
 def Get_Encoding(inputs):
     outPut = []
     # 10 1 768
