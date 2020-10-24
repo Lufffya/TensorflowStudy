@@ -7,7 +7,13 @@ import numpy as np
 import tensorflow as tf
 import xlrd
 
-max_seq_length = 128
+
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction = 0.8
+config.gpu_options.allow_growth = True
+tf.compat.v1.Session(config=config)
+
+max_seq_length = 32
 bert_params = bert.params_from_pretrained_ckpt(
     "Models\\Pretraining_Bert_EN_Uncased_L-12_H-768_A-12_Google-Research")
 bert_layer = bert.BertModelLayer.from_params(bert_params, name="bert")
@@ -57,4 +63,4 @@ print(model.summary())
 model.compile(optimizer=tf.optimizers.Adam(lr=0.00001),
               loss=tf.losses.SparseCategoricalCrossentropy(), metrics=["acc"])
 
-model.fit(train_X, train_Label, epochs=2)
+model.fit(train_X, train_Label, epochs=2, batch_size=32)

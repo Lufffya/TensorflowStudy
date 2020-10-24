@@ -12,6 +12,11 @@ from tqdm import tqdm
 from sklearn.cluster import KMeans
 import xlwt
 
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction = 0.3
+config.gpu_options.allow_growth = True
+tf.compat.v1.Session(config=config)
+
 # '''读取模型'''
 bert_params = bert.params_from_pretrained_ckpt(
     "Models\\Pretraining_Bert_EN_Uncased_L-12_H-768_A-12_Google-Research")

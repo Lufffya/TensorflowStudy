@@ -11,6 +11,11 @@ import pandas as pd
 import scipy.spatial
 from tqdm import tqdm
 
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction = 0.6
+config.gpu_options.allow_growth = True
+tf.compat.v1.Session(config=config)
+
 # 从Bert开源项目中下载的bert中文模型
 # https://github.com/google-research/bert
 
