@@ -1,114 +1,111 @@
-# import tensorflow as tf
-# from tensorflow.keras.layers import Dense, Flatten, Conv2D
-# from tensorflow.keras import Model
 
-# config = tf.compat.v1.ConfigProto()
-# config.gpu_options.per_process_gpu_memory_fraction = 0.3
-# config.gpu_options.allow_growth = True
-# tf.compat.v1.Session(config=config)
+import os
+import tensorflow as tf
+from tensorflow.keras.layers import Dense, Flatten, Conv2D
+from tensorflow.keras import Model
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
 
-# (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-# x_train, x_test = x_train / 255.0, x_test / 255.0
+x_train = x_train[..., tf.newaxis]
+x_test = x_test[..., tf.newaxis]
 
-# x_train = x_train[..., tf.newaxis]
-# x_test = x_test[..., tf.newaxis]
-
-# train_ds = tf.data.Dataset.from_tensor_slices(
-#     (x_train, y_train)).shuffle(10000).batch(32)
-# test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
+train_ds = tf.data.Dataset.from_tensor_slices(
+    (x_train, y_train)).shuffle(10000).batch(32)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
 
 
-# class MyModel(Model):
-#     def __init__(self):
-#         super(MyModel, self).__init__()
-#         self.conv1 = Conv2D(32, 3, activation="relu")
-#         self.flatten = Flatten()
-#         self.d1 = Dense(128, activation="relu")
-#         self.d2 = Dense(10, activation="softmax")
+class MyModel(Model):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        self.conv1 = Conv2D(32, 3, activation="relu")
+        self.flatten = Flatten()
+        self.d1 = Dense(128, activation="relu")
+        self.d2 = Dense(10, activation="softmax")
 
-#     def call(self, x):
-#         x = self.conv1(x)
-#         x = self.flatten(x)
-#         x = self.d1(x)
-#         return self.d2(x)
-
-
-# model = MyModel()
+    def call(self, x):
+        x = self.conv1(x)
+        x = self.flatten(x)
+        x = self.d1(x)
+        return self.d2(x)
 
 
-# loss_object = tf.keras.losses.SparseCategoricalCrossentropy()
-
-# optimizer = tf.optimizers.Adam()
-
-# train_loss = tf.keras.metrics.Mean(name="train_loss")
-# train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
-#     name="train_accuracy")
-
-# test_loss = tf.keras.metrics.Mean(name="test_loss")
-# test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
-#     name="test_accuracy")
+model = MyModel()
 
 
-# def train_step(images, labels):
-#     with tf.GradientTape() as tape:
-#         predictions = model(images)
-#         loss = loss_object(labels, predictions)
-#     gradients = tape.gradient(loss, model.trainable_variables)
-#     optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+loss_object = tf.keras.losses.SparseCategoricalCrossentropy()
 
-#     train_loss(loss)
-#     train_accuracy(labels, predictions)
+optimizer = tf.optimizers.Adam()
 
+train_loss = tf.keras.metrics.Mean(name="train_loss")
+train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
+    name="train_accuracy")
 
-# def test_step(images, labels):
-#     predictions = model(images)
-#     t_loss = loss_object(labels, predictions)
-
-#     test_loss(t_loss)
-#     test_accuracy(labels, predictions)
+test_loss = tf.keras.metrics.Mean(name="test_loss")
+test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
+    name="test_accuracy")
 
 
-# EPOCHS = 5
+def train_step(images, labels):
+    with tf.GradientTape() as tape:
+        predictions = model(images)
+        loss = loss_object(labels, predictions)
+    gradients = tape.gradient(loss, model.trainable_variables)
+    optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
-# for epoch in range(EPOCHS):
-#     # 在下一个epoch开始时，重置评估指标
-#     train_loss.reset_states()
-#     train_accuracy.reset_states()
-#     test_loss.reset_states()
-#     test_accuracy.reset_states()
+    train_loss(loss)
+    train_accuracy(labels, predictions)
 
-#     for images, labels in train_ds:
-#         train_step(images, labels)
 
-#     for test_images, test_labels in test_ds:
-#         test_step(test_images, test_labels)
+def test_step(images, labels):
+    predictions = model(images)
+    t_loss = loss_object(labels, predictions)
 
-#     template = 'Epoch {}, Loss: {}, Accuracy: {}, Test Loss: {}, Test Accuracy: {}'
-#     print(template.format(epoch+1,
-#                           train_loss.result(),
-#                           train_accuracy.result()*100,
-#                           test_loss.result(),
-#                           test_accuracy.result()*100))
+    test_loss(t_loss)
+    test_accuracy(labels, predictions)
+
+
+EPOCHS = 5
+
+for epoch in range(EPOCHS):
+    # 在下一个epoch开始时，重置评估指标
+    train_loss.reset_states()
+    train_accuracy.reset_states()
+    test_loss.reset_states()
+    test_accuracy.reset_states()
+
+    for images, labels in train_ds:
+        train_step(images, labels)
+
+    for test_images, test_labels in test_ds:
+        test_step(test_images, test_labels)
+
+    template = 'Epoch {}, Loss: {}, Accuracy: {}, Test Loss: {}, Test Accuracy: {}'
+    print(template.format(epoch+1,
+                          train_loss.result(),
+                          train_accuracy.result()*100,
+                          test_loss.result(),
+                          test_accuracy.result()*100))
 
 
 # 安装 TensorFlow
 
-import tensorflow as tf
-mnist = tf.keras.datasets.mnist
+# import tensorflow as tf
+# mnist = tf.keras.datasets.mnist
 
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train, x_test = x_train / 255.0, x_test / 255.0
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Flatten(input_shape=(28, 28)),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.Dense(10, activation='softmax')
-])
+# (x_train, y_train), (x_test, y_test) = mnist.load_data()
+# x_train, x_test = x_train / 255.0, x_test / 255.0
+# model = tf.keras.models.Sequential([
+#     tf.keras.layers.Flatten(input_shape=(28, 28)),
+#     tf.keras.layers.Dense(128, activation='relu'),
+#     tf.keras.layers.Dropout(0.2),
+#     tf.keras.layers.Dense(10, activation='softmax')
+# ])
 
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=5)
+# model.compile(optimizer='adam',
+#               loss='sparse_categorical_crossentropy',
+#               metrics=['accuracy'])
+# model.fit(x_train, y_train, epochs=5)
 
-model.evaluate(x_test,  y_test, verbose=2)
+# model.evaluate(x_test,  y_test, verbose=2)
