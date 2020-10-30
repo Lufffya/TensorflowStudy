@@ -1,6 +1,14 @@
 import numpy as np
 import tensorflow as tf
 
+
+
+
+for item in range(0,10):
+    a = item
+print(a)
+
+
 print(np.array([[1,2,3,4],[1,2,3,4]]).shape)
 
 
