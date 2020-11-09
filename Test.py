@@ -25,7 +25,4 @@ print(x2_input.shape)
 
 x2 = tf.keras.layers.Dense(8)(x2_input)
 
-
 concatted = tf.keras.layers.Concatenate()([x1, x2])
-
-concatted.shape
