@@ -12,7 +12,7 @@ random_Dim = 100
 # 训练数据批次
 batch_Size = 60000
 # 训练次数
-epochs = 5000
+epochs = 2000
 
 # mnist手写数据集
 (train_images, _), (_, _) = tf.keras.datasets.mnist.load_data()
@@ -30,12 +30,10 @@ def SeeTrain_images():
 SeeTrain_images()
 
 # 共用相同的优化器
-optimizer = tf.keras.optimizers.Adam(lr=0.0001)
+optimizer = tf.keras.optimizers.Adam(lr=0.0003)
 
 # 定义生成模型
 generator_Model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(64),
-    tf.keras.layers.LeakyReLU(),
     tf.keras.layers.Dense(128),
     tf.keras.layers.LeakyReLU(),
     tf.keras.layers.Dense(256),
@@ -49,8 +47,6 @@ generator_Model.compile(optimizer=optimizer, loss="binary_crossentropy")
 
 # 定义判别模型
 discriminator_Model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(784),
-    tf.keras.layers.LeakyReLU(),
     tf.keras.layers.Dense(512),
     tf.keras.layers.LeakyReLU(),
     tf.keras.layers.Dense(256),
@@ -94,6 +90,19 @@ def Get_Batch_Fake_Samples():
     return x_Fake, y_Fake
 
 
+def Predict(name="20000.png"):
+    generator_Input = np.random.normal(-1, 1, size=[60000, random_Dim])
+    generator_Predict = generator_Model(generator_Input)
+    generator_Image = np.array(generator_Predict).reshape(60000, 28, 28)
+    plt.figure()
+    for i in range(100):
+        plt.subplot(10, 10, i+1)
+        plt.imshow(generator_Image[i], cmap="gray")
+        plt.axis(False)
+    plt.savefig(name)
+    # plt.show()
+
+
 for epoch in range(1, epochs+1):
 
     for step in range(int(60000 / batch_Size)):
@@ -114,20 +123,11 @@ for epoch in range(1, epochs+1):
 
         g_loss = gan_Model.train_on_batch(noise, np.ones(batch_Size))
 
+        if epoch == 1 or epoch % 50 == 0:
+            Predict("epchs{0}.png".format(epoch))
+
     print("epoch:{0},g_loss:{1},d_loss:{2}".format(epoch, g_loss, d_loss))
 
 
-def Predict():
-    generator_Input = np.random.normal(-1, 1, size=[60000, random_Dim])
-    generator_Predict = generator_Model(generator_Input)
-    generator_Image = np.array(generator_Predict).reshape(60000, 28, 28)
-    plt.figure()
-    for i in range(100):
-        plt.subplot(10, 10, i+1)
-        plt.imshow(generator_Image[i], cmap="gray")
-        plt.axis(False)
-    plt.savefig("epchs50000.png")
-    plt.show()
-    
-
 Predict()
+plt.show()

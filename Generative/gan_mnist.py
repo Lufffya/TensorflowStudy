@@ -119,7 +119,7 @@ def save_plot(examples, epoch, n=10):
         # turn off axis
         pyplot.axis('off')
         # plot raw pixel data
-        pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
+        pyplot.imshow(examples[i, :, :, 0], cmap='gray')
     # save plot to file
     filename = 'generated_plot_e%03d.png' % (epoch+1)
     pyplot.savefig(filename)
