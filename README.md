@@ -23,4 +23,6 @@ https://github.com/google-research/bert/blob/master/run_pretraining.py
 
 https://tfhub.dev/s?q=bert
 
+Markdown 图片
+
 ![optimization](https://github.com/Lufeifeina/tensorflowstudy/blob/master/DataSet/optimization%20algorithm.png)
