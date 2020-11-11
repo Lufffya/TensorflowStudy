@@ -23,4 +23,4 @@ https://github.com/google-research/bert/blob/master/run_pretraining.py
 
 https://tfhub.dev/s?q=bert
 
-![优化算法](DataSet\optimization algorithm.png)
+![optimization](/DataSet/optimization algorithm.png)
