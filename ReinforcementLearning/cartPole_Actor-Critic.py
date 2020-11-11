@@ -75,6 +75,8 @@ def run_episode(initial_state: tf.Tensor, model: tf.keras.Model, max_steps: int)
     state = initial_state
 
     for t in tf.range(max_steps):
+        # 可视化过程
+        env.render()
         # Convert state into a batched tensor (batch size = 1)
         state = tf.expand_dims(state, 0)
 
