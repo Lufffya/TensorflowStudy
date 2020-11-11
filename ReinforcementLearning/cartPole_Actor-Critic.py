@@ -129,7 +129,8 @@ def get_expected_return(rewards: tf.Tensor, gamma: float, standardize: bool = Tr
     returns = returns.stack()[::-1]
 
     if standardize:
-        returns = ((returns - tf.math.reduce_mean(returns)) / (tf.math.reduce_std(returns) + eps))
+        returns = ((returns - tf.math.reduce_mean(returns)) /
+                   (tf.math.reduce_std(returns) + eps))
 
     return returns
 
@@ -160,13 +161,15 @@ def train_step(initial_state: tf.Tensor, model: tf.keras.Model, optimizer: tf.ke
     with tf.GradientTape() as tape:
 
         # Run the model for one episode to collect training data
-        action_probs, values, rewards = run_episode(initial_state, model, max_steps_per_episode)
+        action_probs, values, rewards = run_episode(
+            initial_state, model, max_steps_per_episode)
 
         # Calculate expected returns
         returns = get_expected_return(rewards, gamma)
 
         # Convert training data to appropriate TF tensor shapes
-        action_probs, values, returns = [tf.expand_dims(x, 1) for x in [action_probs, values, returns]]
+        action_probs, values, returns = [tf.expand_dims(
+            x, 1) for x in [action_probs, values, returns]]
 
         # Calculating loss values to update our network
         loss = compute_loss(action_probs, values, returns)
@@ -197,12 +200,14 @@ with tqdm.trange(max_episodes) as t:
     for i in t:
         initial_state = tf.constant(env.reset(), dtype=tf.float32)
 
-        episode_reward = int(train_step(initial_state, model, optimizer, gamma, max_steps_per_episode))
+        episode_reward = int(train_step(
+            initial_state, model, optimizer, gamma, max_steps_per_episode))
 
         running_reward = episode_reward*0.01 + running_reward*.99
 
         t.set_description(f'Episode {i}')
-        t.set_postfix(episode_reward=episode_reward,running_reward=running_reward)
+        t.set_postfix(episode_reward=episode_reward,
+                      running_reward=running_reward)
 
         # Show average episode reward every 10 episodes
         if i % 10 == 0:
