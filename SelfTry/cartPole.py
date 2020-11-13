@@ -1,7 +1,8 @@
 import gym
 import numpy as np
 import tensorflow as tf
-
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 # 定义奖励的折减系数
 gamma = 0.99
 # 创建CartPole模拟环境

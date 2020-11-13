@@ -42,7 +42,7 @@ generator_Model = tf.keras.models.Sequential([
     tf.keras.layers.LeakyReLU(),
     tf.keras.layers.Dense(784, activation="tanh"),
 ])
-generator_Model.compile(optimizer=optimizer, loss="binary_crossentropy")
+generator_Model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0003), loss="binary_crossentropy")
 
 
 # 定义判别模型
@@ -55,7 +55,7 @@ discriminator_Model = tf.keras.models.Sequential([
     tf.keras.layers.LeakyReLU(),
     tf.keras.layers.Dense(1, activation="sigmoid"),
 ])
-discriminator_Model.compile(optimizer=optimizer, loss="binary_crossentropy")
+discriminator_Model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0003), loss="binary_crossentropy")
 
 
 # 定义对抗模型,目的是去训练生成模型
@@ -64,7 +64,7 @@ gan_Input = tf.keras.layers.Input(shape=(random_Dim,))
 x = generator_Model(gan_Input)
 gan_Output = discriminator_Model(x)
 gan_Model = tf.keras.models.Model(inputs=gan_Input, outputs=gan_Output)
-gan_Model.compile(loss='binary_crossentropy', optimizer=optimizer)
+gan_Model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.Adam(lr=0.0003))
 
 
 # 将训练图片的像素压缩至-1到1之间
