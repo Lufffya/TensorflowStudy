@@ -109,9 +109,9 @@ while True:
 
     episode_reward = int(tf.math.reduce_sum(rewards))
 
-    running_reward = episode_reward * 0.01 + running_reward * .99
+    running_reward = episode_reward * 0.01 + running_reward * 0.99
 
-    print(f'episode {pisodes} --- episode_reward: {episode_reward} --- running_reward: {running_reward} --- loss {loss.numpy()}')
+    # print(f'episode {pisodes} --- episode_reward: {episode_reward} --- running_reward: {running_reward} --- loss {loss.numpy()}')
 
     if running_reward > 195:
         break
