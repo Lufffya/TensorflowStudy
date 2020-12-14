@@ -1,5 +1,7 @@
-import numpy as np
-import tensorflow as tf
+import gym
 
 
 
+env = gym.make("CarRacing-v0")
+
+print(env.action_space.action)

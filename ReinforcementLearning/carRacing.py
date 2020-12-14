@@ -16,8 +16,8 @@ for i_episode in range(20):
 
     for t in range(100):
 
-        plt.imshow(observation)
-        plt.show()
+        # plt.imshow(observation)
+        # plt.show()
 
         env.render()
 
