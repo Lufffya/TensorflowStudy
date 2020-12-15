@@ -74,8 +74,8 @@ class Agent():
 
     def select_action(self, state):
         state = np.expand_dims(state, axis=0)
-        pi, old_log_p, v = self.model.call(state)
-        return pi, old_log_p, v
+        pi, old_log_p, value = self.model.call(state)
+        return pi, old_log_p, value
 
     def store(self, state, action, value, reward, done, old_log_pi):
         self.buffer.append((state, action, value, reward, done, old_log_pi))
@@ -115,7 +115,6 @@ class Agent():
         return advantages
 
     def update(self, last_val):
-
         states, actions, values, rewards, dones, old_log_prob = self.get_store()
 
         advantages = self.compute_gae(rewards, values, last_val, dones, GAMMA, LAMBDA)
@@ -131,9 +130,10 @@ class Agent():
                 slices = (arr[batch_indexs] for arr in (states, actions, returns, advantages, old_log_prob))
                 pi_loss, value_loss, entropy_loss, total_loss, old_neg_log_val, neg_log_val, approx_kl, ratio = self.model.loss(*slices)
 
+        self.buffer = []
 
+    
 def main():
-
     # 初始化环境
     env = CarRacing()
     # 初始化智能体
@@ -152,20 +152,21 @@ def main():
         while True:
             t += 1
             # 可视化环境
-            env.render()
+            # env.render()
 
-            pi, old_log_p, v = agent.select_action(state)
+            pi, old_log_pi, value = agent.select_action(state)
 
-            clipped_actions = np.clip(pi.numpy()[0], env.action_space_low(), env.action_space_high())
+            action = np.clip(pi.numpy()[0], env.action_space_low(), env.action_space_high())
 
-            state, reward, done = env.step(clipped_actions)
+            next_state, reward, done = env.step(action)
 
+            if agent.store(state, pi.numpy()[0], value.numpy()[0], reward, done, old_log_pi.numpy()[0]):
+                pi, old_log_pi, value = agent.select_action(next_state)
+                last_value =  value.numpy()[0]
+                agent.update(last_value)
+
+            state = next_state
             total_reward += reward
-
-            if agent.store(state, pi.numpy()[0], v.numpy()[0], reward, done, np.squeeze(old_log_p.numpy()[0])):
-                pi, old_log_p, v = agent.select_action(state)
-                last_val =  v.numpy()[0]
-                agent.update(last_val)
 
             if done:
                 break
