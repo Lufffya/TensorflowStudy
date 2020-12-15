@@ -6,6 +6,12 @@ from ppo_model import PPO
 import gym
 from collections import deque
 
+
+config = tf.compat.v1.ConfigProto()
+# config.gpu_options.per_process_gpu_memory_fraction = 1.0
+config.gpu_options.allow_growth = True
+tf.compat.v1.Session(config=config)
+
 #==========定义超参数============#
 GAMMA = 0.99
 LAMBDA = 0.95
@@ -120,7 +126,7 @@ class Agent():
         advantages = self.compute_gae(rewards, values, last_val, dones, GAMMA, LAMBDA)
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
         returns = advantages + values
-
+        
         indexs = np.arange(self.STEPS_PER_EPOCH)
         for epoch in range(self.EPOCHS):
             np.random.shuffle(indexs)
@@ -152,7 +158,7 @@ def main():
         while True:
             t += 1
             # 可视化环境
-            # env.render()
+            env.render()
 
             pi, old_log_pi, value = agent.select_action(state)
 

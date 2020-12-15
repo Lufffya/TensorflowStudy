@@ -4,6 +4,12 @@ import tensorflow_probability as tfp
 from tensorflow.keras import layers, models
 
 
+config = tf.compat.v1.ConfigProto()
+# config.gpu_options.per_process_gpu_memory_fraction = 1.0
+config.gpu_options.allow_growth = True
+tf.compat.v1.Session(config=config)
+
+
 class Actor(layers.Layer):
     def __init__(self, action_size, epsilon):
         super(Actor, self).__init__()
