@@ -20,8 +20,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 '''准备数据集'''
-data_dir = tf.keras.utils.get_file(
-    'flower_photos', origin="https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz", untar=True)
+data_dir = tf.keras.utils.get_file('flower_photos', origin="https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz", untar=True)
 data_dir = pathlib.Path(data_dir)
 
 # 创建数据集
@@ -30,12 +29,10 @@ img_height = 180
 img_width = 180
 
 # 读取训练数据集
-train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-    data_dir, validation_split=0.2, subset="training", seed=123, image_size=(img_height, img_width), batch_size=batch_size)
+train_ds = tf.keras.preprocessing.image_dataset_from_directory(data_dir, validation_split=0.2, subset="training", seed=123, image_size=(img_height, img_width), batch_size=batch_size)
 
 # 读取测试数据集
-val_ds = tf.keras.preprocessing.image_dataset_from_directory(
-    data_dir, validation_split=0.2, subset="validation", seed=123, image_size=(img_height, img_width), batch_size=batch_size)
+val_ds = tf.keras.preprocessing.image_dataset_from_directory(data_dir, validation_split=0.2, subset="validation", seed=123, image_size=(img_height, img_width), batch_size=batch_size)
 
 class_names = train_ds.class_names
 print(class_names)
@@ -74,8 +71,7 @@ print(np.min(first_image), np.max(first_image))
 class CNNModel(keras.models.Model):
     def __init__(self):
         super(CNNModel, self).__init__()
-        self.normalization = layers.experimental.preprocessing.Rescaling(
-            1./255)
+        self.normalization = layers.experimental.preprocessing.Rescaling(1./255)
         self.conv2d1 = layers.Conv2D(16, 3, padding="same")
         self.conv2d1Pooling = layers.MaxPooling2D()
         self.conv2d2 = layers.Conv2D(32, 3, padding="same")

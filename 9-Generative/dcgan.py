@@ -10,7 +10,7 @@
 # 什么是生成对抗网络
 # 生成对抗网络（GANs）是当今计算机科学领域最有趣的想法之一
 # 两个模型通过对抗过程同时训练
-# 一个生成器（generator）学习创造看起来真实的图像，而判别器（discriminator）学习区分真假图像
+# 一个生成器（generator）学习创造看起来真实的图像, 而判别器（discriminator）学习区分真假图像
 
 import IPython
 import tensorflow as tf
@@ -48,9 +48,11 @@ train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_
 '''创建模型'''
 
 # 生成器使用 tf.keras.layers.Conv2DTranspose （上采样）层来从种子（随机噪声）中产生图片
-# 以一个使用该种子作为输入的 Dense 层开始，然后多次上采样直到达到所期望的 28x28x1 的图片尺寸
-# 注意除了输出层使用 tanh 之外，其他每层均使用 tf.keras.layers.LeakyReLU 作为激活函数
+# 以一个使用该种子作为输入的 Dense 层开始, 然后多次上采样直到达到所期望的 28x28x1 的图片尺寸
+# 注意除了输出层使用 tanh 之外, 其他每层均使用 tf.keras.layers.LeakyReLU 作为激活函数
 # assert 当后接表达式为False 时抛出异常
+
+
 def make_generator_model():
     model = tf.keras.Sequential()
     model.add(layers.Dense(7*7*256, use_bias=False, input_shape=(100,)))
@@ -70,7 +72,7 @@ def make_generator_model():
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
 
-    model.add(layers.Conv2DTranspose(1, (5, 5), strides=(2, 2),padding='same', use_bias=False, activation='tanh'))
+    model.add(layers.Conv2DTranspose(1, (5, 5), strides=(2, 2), padding='same', use_bias=False, activation='tanh'))
     # assert model.output_shape == (None, 28, 28, 1)
 
     return model
@@ -89,8 +91,7 @@ plt.show()
 # 判别器是一个基于 CNN 的图片分类器
 def make_discriminator_model():
     model = tf.keras.Sequential()
-    model.add(layers.Conv2D(64, (5, 5), strides=(2, 2),
-                            padding='same', input_shape=[28, 28, 1]))
+    model.add(layers.Conv2D(64, (5, 5), strides=(2, 2), padding='same', input_shape=[28, 28, 1]))
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3))
 
@@ -104,7 +105,7 @@ def make_discriminator_model():
     return model
 
 
-# 使用（尚未训练的）判别器来对图片的真伪进行判断。模型将被训练为为真实图片输出正值，为伪造图片输出负值。
+# 使用（尚未训练的）判别器来对图片的真伪进行判断。模型将被训练为为真实图片输出正值, 为伪造图片输出负值。
 discriminator = make_discriminator_model()
 decision = discriminator(generated_image)
 print(decision)
@@ -118,7 +119,7 @@ cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
 # 判别器损失
 # 该方法量化判别器从判断真伪图片的能力
-# 它将判别器对真实图片的预测值与值全为 1 的数组进行对比，将判别器对伪造（生成的）图片的预测值与值全为 0 的数组进行对比
+# 它将判别器对真实图片的预测值与值全为 1 的数组进行对比, 将判别器对伪造（生成的）图片的预测值与值全为 0 的数组进行对比
 def discriminator_loss(real_output, fake_output):
     real_loss = cross_entropy(tf.ones_like(real_output), real_output)
     fake_loss = cross_entropy(tf.zeros_like(fake_output), fake_output)
@@ -128,18 +129,18 @@ def discriminator_loss(real_output, fake_output):
 
 # 生成器损失
 # 生成器损失量化其欺骗判别器的能力
-# 直观来讲，如果生成器表现良好，判别器将会把伪造图片判断为真实图片（或 1）。这里我们将把判别器在生成图片上的判断结果与一个值全为 1 的数组进行对比
+# 直观来讲, 如果生成器表现良好, 判别器将会把伪造图片判断为真实图片（或 1）。这里我们将把判别器在生成图片上的判断结果与一个值全为 1 的数组进行对比
 def generator_loss(fake_output):
     return cross_entropy(tf.ones_like(fake_output), fake_output)
 
 
-# 由于我们需要分别训练两个网络，判别器和生成器的优化器是不同的
+# 由于我们需要分别训练两个网络, 判别器和生成器的优化器是不同的
 generator_optimizer = tf.keras.optimizers.Adam(1e-4)
 discriminator_optimizer = tf.keras.optimizers.Adam(1e-4)
 
 
 # 保存检查点
-# 本笔记还演示了如何保存和恢复模型，这在长时间训练任务被中断的情况下比较有帮助
+# 本笔记还演示了如何保存和恢复模型, 这在长时间训练任务被中断的情况下比较有帮助
 checkpoint_dir = './training_checkpoints'
 checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
 checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer, discriminator_optimizer=discriminator_optimizer, generator=generator, discriminator=discriminator)
@@ -158,7 +159,7 @@ seed = tf.random.normal([num_examples_to_generate, noise_dim])
 # 生成与保存图片
 def generate_and_save_images(model, epoch, test_input):
     # 注意 training` 设定为 False
-    # 因此，所有层都在推理模式下运行（batchnorm）。
+    # 因此, 所有层都在推理模式下运行（batchnorm）。
     predictions = model(test_input, training=False)
 
     fig = plt.figure(figsize=(4, 4))
@@ -196,7 +197,7 @@ def train_step(images):
 
 
 # 训练循环在生成器接收到一个随机种子作为输入时开始。该种子用于生产一张图片
-# 判别器随后被用于区分真实图片（选自训练集）和伪造图片（由生成器生成）。针对这里的每一个模型都计算损失函数，并且计算梯度用于更新生成器与判别器
+# 判别器随后被用于区分真实图片（选自训练集）和伪造图片（由生成器生成）。针对这里的每一个模型都计算损失函数, 并且计算梯度用于更新生成器与判别器
 def train(dataset, epochs):
     for epoch in range(epochs):
         start = time.time()
@@ -221,7 +222,7 @@ def train(dataset, epochs):
 
 
 # 调用上面定义的 train() 方法来同时训练生成器和判别器
-# 注意，训练 GANs 可能是棘手的。重要的是，生成器和判别器不能够互相压制对方（例如，他们以相似的学习率训练）
+# 注意, 训练 GANs 可能是棘手的。重要的是, 生成器和判别器不能够互相压制对方（例如, 他们以相似的学习率训练）
 train(train_dataset, EPOCHS)
 
 

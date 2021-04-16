@@ -15,8 +15,7 @@ tfds.disable_progress_bar()
 
 '''准备数据'''
 # 下载 Oxford-IIIT Pets 数据集
-dataset, info = tfds.load('oxford_iiit_pet:3.*.*',
-                          with_info=True, download=False)
+dataset, info = tfds.load('oxford_iiit_pet:3.*.*', with_info=True, download=False)
 
 
 def normalize(input_image, input_mask):
@@ -54,8 +53,7 @@ batch_size = 64  # 训练数据批次长度
 steps_per_epoch = train_length // batch_size  # 每次批处理的步数
 
 # 对数据进行处理
-train_dataset = dataset['train'].map(load_image_train).cache().shuffle(
-    1000).batch(batch_size).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+train_dataset = dataset['train'].map(load_image_train).cache().shuffle(1000).batch(batch_size).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
 test_dataset = dataset['test'].map(load_image_test).batch(batch_size)
 
 
@@ -86,8 +84,7 @@ input_shape = (128, 128, 3)
 
 #################编码器模型（下采样）###################
 # 编码器是一个预训练的 MobileNetV2 模型
-base_model = tf.keras.applications.MobileNetV2(
-    input_shape=input_shape, include_top=False)
+base_model = tf.keras.applications.MobileNetV2(input_shape=input_shape, include_top=False)
 # base_model.summary()
 
 # 使用这些层的激活设置
@@ -103,8 +100,7 @@ layer_names = [
 layers = [base_model.get_layer(name).output for name in layer_names]
 
 # 创建特征提取模型
-down_stack = tf.keras.models.Model(
-    inputs=base_model.input, outputs=layers, trainable=False)
+down_stack = tf.keras.models.Model(inputs=base_model.input, outputs=layers, trainable=False)
 # down_stack.summary()
 
 
@@ -137,8 +133,7 @@ def unet_model(output_channels):
         x = concat([x, skip])
 
     # 这是模型的最后一层
-    last = tf.keras.layers.Conv2DTranspose(
-        output_channels, 3, strides=2, padding='same')  # 64x64 -> 128x128
+    last = tf.keras.layers.Conv2DTranspose(output_channels, 3, strides=2, padding='same')  # 64x64 -> 128x128
 
     x = last(x)
     return tf.keras.models.Model(inputs=inputs, outputs=x)
@@ -148,8 +143,7 @@ def unet_model(output_channels):
 model = unet_model(output_channels)
 model.summary()
 
-model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.SparseCategoricalCrossentropy(
-    from_logits=True), metrics=['accuracy'])
+model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
 
 
 def create_mask(pred_mask):
@@ -164,8 +158,7 @@ def show_predictions(dataset=None, num=1):
             pred_mask = model.predict(image)
             display([image[0], mask[0], create_mask(pred_mask)])
     else:
-        display([sample_image, sample_mask,
-                 create_mask(model.predict(sample_image[tf.newaxis, ...]))])
+        display([sample_image, sample_mask,create_mask(model.predict(sample_image[tf.newaxis, ...]))])
 
 
 # 我们试着运行一下模型，看看它在训练之前给出的预测值。
@@ -182,8 +175,7 @@ class DisplayCallback(tf.keras.callbacks.Callback):
 val_subsplits = 5
 validation_steps = info.splits['test'].num_examples // batch_size // val_subsplits
 
-model_history = model.fit(train_dataset, epochs=10, validation_steps=validation_steps, steps_per_epoch=steps_per_epoch,
-                          validation_data=test_dataset, callbacks=[DisplayCallback()])
+model_history = model.fit(train_dataset, epochs=10, validation_steps=validation_steps, steps_per_epoch=steps_per_epoch, validation_data=test_dataset, callbacks=[DisplayCallback()])
 
 loss = model_history.history['loss']
 val_loss = model_history.history['val_loss']
