@@ -17,8 +17,7 @@ from tensorflow import keras
 
 import IPython
 import kerastuner as kt
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 # 在本教程中, 您将使用Keras Tuner为机器学习模型找到最佳的超参数, 该模型对Fashion MNIST数据集中的服装图像进行分类。
 (img_train, label_train), (img_test, label_test) = keras.datasets.fashion_mnist.load_data()
 img_train = img_train.astype('float32') / 255.0

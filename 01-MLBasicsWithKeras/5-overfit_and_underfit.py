@@ -15,8 +15,6 @@ import tensorflow as tf
 
 from tensorflow.keras import layers
 from tensorflow.keras import regularizers
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 print(tf.__version__)
 
 
@@ -27,14 +25,12 @@ shutil.rmtree(logdir, ignore_errors=True)
 # 希格斯数据集
 # 本教程的目的不是做粒子物理学，所以不要关注数据集的细节。它包含11000000个示例（每个示例具有28个特征）和一个二进制类标签。
 
-gz = tf.keras.utils.get_file(
-    'HIGGS.csv.gz', 'E:\HIGGS.csv.gz')
+gz = tf.keras.utils.get_file('HIGGS.csv.gz', 'E:\HIGGS.csv.gz')
 
 FEATURES = 28
 
 
-ds = tf.data.experimental.CsvDataset(
-    gz, [float(), ]*(FEATURES+1), compression_type="GZIP")
+ds = tf.data.experimental.CsvDataset(gz, [float(), ]*(FEATURES+1), compression_type="GZIP")
 
 
 def pack_row(*row):
@@ -86,8 +82,7 @@ plt.show()
 def get_callbacks(name):
     return [
         tfdocs.modeling.EpochDots(),
-        tf.keras.callbacks.EarlyStopping(
-            monitor='val_binary_crossentropy', patience=200),
+        tf.keras.callbacks.EarlyStopping(monitor='val_binary_crossentropy', patience=200),
         tf.keras.callbacks.TensorBoard(logdir/name),
     ]
 
@@ -97,10 +92,7 @@ def compile_and_fit(model, name, optimizer=None, max_epochs=10000):
         optimizer = get_optimizer()
     model.compile(optimizer=optimizer,
                   loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                  metrics=[
-                      tf.keras.losses.BinaryCrossentropy(
-                          from_logits=True, name='binary_crossentropy'),
-                      'accuracy'])
+                  metrics=[tf.keras.losses.BinaryCrossentropy(from_logits=True, name='binary_crossentropy'), 'accuracy'])
 
     model.summary()
 
@@ -124,8 +116,7 @@ tiny_model = tf.keras.Sequential([
 size_histories['Tiny'] = compile_and_fit(tiny_model, 'sizes/Tiny')
 
 
-plotter = tfdocs.plots.HistoryPlotter(
-    metric='binary_crossentropy', smoothing_std=10)
+plotter = tfdocs.plots.HistoryPlotter(metric='binary_crossentropy', smoothing_std=10)
 plotter.plot(size_histories)
 plt.ylim([0.5, 0.7])
 plt.show()

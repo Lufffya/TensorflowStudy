@@ -2,9 +2,7 @@
 # 自定义的网络层
 # https://tensorflow.google.cn/tutorials/customization/custom_layers
 
-import os
 import tensorflow as tf
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # 在tf.keras.层包, 层是对象。建造一个层
 # 只需构造对象。大多数层将数字作为第一个参数

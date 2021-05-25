@@ -2,11 +2,8 @@
 # 保存和加载模型
 # https://tensorflow.google.cn/tutorials/keras/save_and_load
 
-import os
 import tensorflow as tf
 from tensorflow import keras
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
 
 # 获取示例数据集
 # 要演示如何保存和加载权重, 您将使用 MNIST 数据集. 要加快运行速度, 请使用前1000个示例：

@@ -6,7 +6,6 @@
 # 本教程演示了如何使用深度卷积生成对抗网络（DCGAN）生成手写数字图片
 # 该代码是使用 Keras Sequential API 与 tf.GradientTape 训练循环编写的
 
-
 # 什么是生成对抗网络
 # 生成对抗网络（GANs）是当今计算机科学领域最有趣的想法之一
 # 两个模型通过对抗过程同时训练
@@ -24,10 +23,9 @@ from tensorflow.keras import layers
 import time
 
 from IPython import display
-# import os
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 config = tf.compat.v1.ConfigProto()
-config.gpu_options.per_process_gpu_memory_fraction = 1.0
+# config.gpu_options.per_process_gpu_memory_fraction = 1.0
 config.gpu_options.allow_growth = True
 tf.compat.v1.Session(config=config)
 
@@ -39,14 +37,13 @@ train_images = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('fl
 train_images = (train_images - 127.5) / 127.5  # 将图片标准化到 [-1, 1] 区间内
 
 BUFFER_SIZE = 60000
-BATCH_SIZE = 200
+BATCH_SIZE = 256
 
 # 批量化和打乱数据
 train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 
 
 '''创建模型'''
-
 # 生成器使用 tf.keras.layers.Conv2DTranspose （上采样）层来从种子（随机噪声）中产生图片
 # 以一个使用该种子作为输入的 Dense 层开始, 然后多次上采样直到达到所期望的 28x28x1 的图片尺寸
 # 注意除了输出层使用 tanh 之外, 其他每层均使用 tf.keras.layers.LeakyReLU 作为激活函数
@@ -112,7 +109,6 @@ print(decision)
 
 
 '''定义损失函数和优化器'''
-
 # 该方法返回计算交叉熵损失的辅助函数
 cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
@@ -147,7 +143,6 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer, discri
 
 
 '''定义训练循环'''
-
 EPOCHS = 50
 noise_dim = 100
 num_examples_to_generate = 16
@@ -170,7 +165,7 @@ def generate_and_save_images(model, epoch, test_input):
         plt.axis('off')
 
     plt.savefig('image_at_epoch_{:04d}.png'.format(epoch))
-    plt.show()
+    # plt.show()
 
 
 # 注意 `tf.function` 的使用

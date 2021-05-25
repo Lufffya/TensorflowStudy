@@ -26,33 +26,34 @@ plt.show()
 
 # 将训练图片的像素压缩至-1到1之间
 train_images = (train_images / 127.5) - 1
-train_images = train_images.reshape(60000, 784)
+train_images = np.expand_dims(train_images, axis=-1)
 
 adam = tf.keras.optimizers.Adam(lr=0.0002)
 
 def generator():
     model = tf.keras.models.Sequential([
-        tf.keras.layers.Dense(128, ),
-        tf.keras.layers.LeakyReLU(),
+        tf.keras.layers.Dense(7*7*128, input_shape=(random_dim,)),
         tf.keras.layers.BatchNormalization(),
-        tf.keras.layers.Dense(256),
         tf.keras.layers.LeakyReLU(),
+        tf.keras.layers.Reshape((7, 7, 128)),
+        tf.keras.layers.Conv2DTranspose(64, (3,3), padding="same"),
         tf.keras.layers.BatchNormalization(),
-        tf.keras.layers.Dense(512),
         tf.keras.layers.LeakyReLU(),
-        tf.keras.layers.Dense(784, activation="tanh")
+        tf.keras.layers.Conv2DTranspose(32, (3,3), strides=(2,2), padding="same"),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.LeakyReLU(),
+        tf.keras.layers.Conv2DTranspose(1, (3,3), strides=(2,2), padding="same", activation="tanh")
     ])
     return model
 
 
 def discriminator():
     model = tf.keras.models.Sequential([
-        tf.keras.layers.Dense(512),
+        tf.keras.layers.Conv2D(32, (3,3), padding="same", input_shape=(28, 28, 1)),
         tf.keras.layers.LeakyReLU(),
-        tf.keras.layers.Dense(256),
+        tf.keras.layers.Conv2D(64, (3,3), padding="same"),
         tf.keras.layers.LeakyReLU(),
-        tf.keras.layers.Dense(128,),
-        tf.keras.layers.LeakyReLU(),
+        tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(1, activation="sigmoid")
     ])
     model.compile(optimizer=adam, loss="binary_crossentropy")
@@ -95,7 +96,7 @@ def get_batch_fake_samples(batch_size):
 
 def predict(name):
     generator_Input = np.random.normal(size=[100, random_dim])
-    generator_Image = generator_model.predict(generator_Input).reshape(100, 28, 28)
+    generator_Image = np.squeeze(generator_model.predict(generator_Input))
     plt.figure()
     for i in range(100):
         plt.subplot(10, 10, i+1)

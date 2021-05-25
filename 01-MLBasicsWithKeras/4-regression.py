@@ -11,20 +11,15 @@ import seaborn as sns
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 print(tf.__version__)
 
 # 获取数据
 # 首先下载数据集
-dataset_path = keras.utils.get_file(
-    "auto-mpg.data", "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data")
+dataset_path = keras.utils.get_file("auto-mpg.data", "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data")
 
 # 使用 pandas 导入数据集
-column_names = ['MPG', 'Cylinders', 'Displacement',
-                'Horsepower', 'Weight', 'Acceleration', 'Model Year', 'Origin']
-raw_dataset = pd.read_csv(dataset_path, names=column_names,
-                          na_values="?", comment='\t', sep=" ", skipinitialspace=True)
+column_names = ['MPG', 'Cylinders', 'Displacement', 'Horsepower', 'Weight', 'Acceleration', 'Model Year', 'Origin']
+raw_dataset = pd.read_csv(dataset_path, names=column_names, na_values="?", comment='\t', sep=" ", skipinitialspace=True)
 
 '''检索数据'''
 print(raw_dataset.info())
@@ -62,8 +57,7 @@ test_dataset = dataset.drop(train_dataset.index)
 
 # 数据检查
 # 快速查看训练集中几对列的联合分布
-sns.pairplot(
-    train_dataset[["MPG", "Cylinders", "Displacement", "Weight"]], diag_kind="kde")
+sns.pairplot(train_dataset[["MPG", "Cylinders", "Displacement", "Weight"]], diag_kind="kde")
 plt.show()
 
 # 也可以查看总体的数据统计:
@@ -93,17 +87,14 @@ normed_test_data = norm(test_dataset)
 
 def build_model():
     model = keras.Sequential([
-        layers.Dense(64, activation='relu', input_shape=[
-                     len(train_dataset.keys())]),
+        layers.Dense(64, activation='relu', input_shape=[len(train_dataset.keys())]),
         layers.Dense(64, activation='relu'),
         layers.Dense(1)
     ])
 
     optimizer = tf.keras.optimizers.RMSprop(0.001)
 
-    model.compile(loss='mse',
-                  optimizer=optimizer,
-                  metrics=['mae', 'mse'])
+    model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
     return model
 
 
@@ -130,8 +121,7 @@ EPOCHS = 1000
 # patience 值用来检查改进 epochs 的数量
 early_stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
 
-history = model.fit(normed_train_data, train_labels, epochs=EPOCHS,
-                    validation_split=0.2, verbose=0, callbacks=[early_stop, PrintDot()])
+history = model.fit(normed_train_data, train_labels, epochs=EPOCHS, validation_split=0.2, verbose=0, callbacks=[early_stop, PrintDot()])
 
 # 使用 history 对象中存储的统计信息可视化模型的训练进度。
 hist = pd.DataFrame(history.history)
@@ -146,20 +136,16 @@ def plot_history(history):
     plt.figure()
     plt.xlabel('Epoch')
     plt.ylabel('Mean Abs Error [MPG]')
-    plt.plot(hist['epoch'], hist['mae'],
-             label='Train Error')
-    plt.plot(hist['epoch'], hist['val_mae'],
-             label='Val Error')
+    plt.plot(hist['epoch'], hist['mae'], label='Train Error')
+    plt.plot(hist['epoch'], hist['val_mae'], label='Val Error')
     plt.ylim([0, 5])
     plt.legend()
 
     plt.figure()
     plt.xlabel('Epoch')
     plt.ylabel('Mean Square Error [$MPG^2$]')
-    plt.plot(hist['epoch'], hist['mse'],
-             label='Train Error')
-    plt.plot(hist['epoch'], hist['val_mse'],
-             label='Val Error')
+    plt.plot(hist['epoch'], hist['mse'], label='Train Error')
+    plt.plot(hist['epoch'], hist['val_mse'], label='Val Error')
     plt.ylim([0, 20])
     plt.legend()
     plt.show()
