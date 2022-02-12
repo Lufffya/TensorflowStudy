@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 基本图像分类
 # 本指南将训练一个神经网络模型, 对运动鞋和衬衫等服装图像进行分类
 # https://tensorflow.google.cn/tutorials/keras/classification

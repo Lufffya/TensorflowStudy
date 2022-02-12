@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 使用Actor-Critic方法玩CartPole
 # https://tensorflow.google.cn/tutorials/reinforcement_learning/actor_critic
 

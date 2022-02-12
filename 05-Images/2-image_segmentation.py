@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 图像分割
 # 图像分割的任务是训练一个神经网络来输出该图像对每一个像素的掩码
 # https://tensorflow.google.cn/tutorials/images/segmentation

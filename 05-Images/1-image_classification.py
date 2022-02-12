@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 花朵照片分类
 # https://tensorflow.google.cn/tutorials/images/classification
 #

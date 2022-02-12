@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 基本的自编码器
 # https://www.tensorflow.org/tutorials/generative/autoencoder#second_example_image_denoising
 

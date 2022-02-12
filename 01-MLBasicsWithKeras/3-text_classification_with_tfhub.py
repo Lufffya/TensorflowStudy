@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 使用 Keras 和 Tensorflow Hub 对电影评论进行文本分类
 # 本教程演示了使用 Tensorflow Hub 和 Keras 进行迁移学习的基本应用。
 # TensorFlow Hub, 一个用于迁移学习的库和平台

@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 深度卷积生成对抗网络
 # https://tensorflow.google.cn/tutorials/generative/dcgan
 

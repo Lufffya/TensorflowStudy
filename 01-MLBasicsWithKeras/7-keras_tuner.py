@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 使用 Keras Tuner 调整超参数
 # https://tensorflow.google.cn/tutorials/keras/keras_tuner
 # https://blog.tensorflow.org/2020/01/hyperparameter-tuning-with-keras-tuner.html

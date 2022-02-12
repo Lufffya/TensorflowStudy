@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 基本回归：预测燃油效率
 # 构建了一个用来预测70年代末到80年代初汽车燃油效率的模型
 # https://tensorflow.google.cn/tutorials/keras/regression

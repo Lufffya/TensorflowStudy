@@ -1,4 +1,4 @@
-#
+#! -*- coding:utf-8 -*-
 # 自定义的网络层
 # https://tensorflow.google.cn/tutorials/customization/custom_layers
 
