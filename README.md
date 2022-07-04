@@ -1,7 +1,4 @@
-# tensorflow 学习笔记
-
-不积跬步, 无以至千里
-不积小流, 无以成江海
+# tensorflow 
 
 If you don't accumulate small steps, you can't reach thousands of miles
 
